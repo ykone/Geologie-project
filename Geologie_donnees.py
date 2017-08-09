@@ -39,7 +39,7 @@ def tracerCourbeGeologique(Xdata, Ydata):
     plt.show()
 
 
-def tracerProfilTopographique():
+def tracerProfilTopographique(donneesX, donneesY):
     fig = figure("GeoGraph - Profil topographique")
     ax = Axes3D(fig)
     X = donneesX #np.arange(-4, 4, 0.25)
