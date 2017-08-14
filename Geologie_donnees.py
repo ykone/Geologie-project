@@ -42,25 +42,5 @@ def tracerCourbeGeologique(Xdata, Ydata):
 def tracerProfilTopographique(X, Y, Z):
     fig = figure("GeoGraph - Profil topographique", figsize=(14, 7))
     ax = fig.add_subplot(111, projection='3d')
-    # X = donneesX #np.arange(-4, 4, 0.25)
-    # Y = donneesY #np.arange(-4, 4, 0.25)
-    # X, Y = np.meshgrid(X, Y)
-    # R = np.sqrt(X ** 2 + Y ** 2)
-    # Z = np.sin(R)
-    # ax.plot_surface(X, Y, Z)
-    # ax.contourf(X, Y, Z)
-    # ax.set_zlim(-2, 2)
-    # savefig('../figures/plot3d_ex.png',dpi=48)
     ax.plot_wireframe(Z, X, Y)
     plt.show()
-
-sai = [8000, 9000, 7000]
-sa = []
-#convertir(sai, sa)
-#print(sai)
-#print("======================================================")
-#print(echelle)
-#print("======================================================")
-#print(sa)
-#tracerCourbeGeologique()
-#tracerProfilTopographique()

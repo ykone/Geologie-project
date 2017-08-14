@@ -224,7 +224,7 @@ class Ui_Accueil(object):
         self.label.setGeometry(QtCore.QRect(0, 0, 1000, 581))
         self.label.setMinimumSize(QtCore.QSize(1000, 0))
         self.label.setMaximumSize(QtCore.QSize(1000, 16777215))
-        pixmap = QtGui.QPixmap("img.jpg")
+        pixmap = QtGui.QPixmap("images/img.jpg")
         self.label.setPixmap(pixmap)
         self.label.setText("")
         self.label.setObjectName("label")
@@ -333,7 +333,7 @@ class Ui_Accueil(object):
         self.btn_moins.setGeometry(QtCore.QRect(40, 540, 21, 21))
         self.btn_moins.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("images/moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_moins.setIcon(icon)
         self.btn_moins.setObjectName("btn_moins")
 
@@ -348,7 +348,7 @@ class Ui_Accueil(object):
         self.btn_plus.setFont(font)
         self.btn_plus.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("images/plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_plus.setIcon(icon1)
         self.btn_plus.setObjectName("btn_plus")
 
