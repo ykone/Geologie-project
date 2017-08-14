@@ -8,17 +8,20 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import Geologie_donnees as geologie_data
+import math as mathematiques
 
 class Ui_Accueil(object):
 
     ###################### Déclaration des tableaux ######################################
 
     donnees_x = list()
+    donnees_x_initiale = list()
     donnees_y = list()
     donnees_z = list()
     donnees_converties = False
     echelle = 0.0
     equidistance = 0
+    fascicule = 0
 
     ################## les fonctions appliquées aux différents boutons ###################
     def quitterApplication(self):
@@ -85,6 +88,7 @@ class Ui_Accueil(object):
         self.val_equi.clear()
         self.donnees_converties = False
         self.donnees_x.clear()
+        self.donnees_x_initiale.clear()
         self.donnees_y.clear()
         self.donnees_z.clear()
 
@@ -106,10 +110,32 @@ class Ui_Accueil(object):
             self.echelle = geologie_data.calculerEchelle(long_papier, Long_papier)
             self.val_echelle.setText("1 : "+str(self.echelle))
 
+            ############ la fonction qui saisit les données ##########
+            def saisieDonnees(self, nb_lignes, nb_colonnes):
+                i, j = 0, 0
+                for i in range(0, nb_lignes):
+                    for i in range(0, nb_lignes):
+                        for j in range(0, nb_colonnes):
+                            value = self.tableWidget.item(i, j)
+                            if value is not None and len(value.text()) != 0:
+                                value = value.text()
+                                if j == 0:
+                                    #if(QtWidgets.QTableWidget.cellChanged(self.tableWidget, i, j)):
+                                    self.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(str(geologie_data.convertirX(int(value)))))
+                                    self.donnees_y.append(geologie_data.convertirY(int(value), self.echelle))
+                                    self.tableWidget.setItem(i, j + 1, QtWidgets.QTableWidgetItem(
+                                        str(geologie_data.convertirY(int(value), self.echelle))))
+                                    self.donnees_z.append(geologie_data.convertirY(int(value), self.echelle))
+                                    self.tableWidget.setItem(i, j + 2, QtWidgets.QTableWidgetItem(
+                                        str(geologie_data.convertirY(self.fascicule, self.echelle))))
+                                print("The current is ", i, ", ", j)
+                                print("In this cell we have ", value)
+
     ################### Conversion des données du tableau #############################
                    ############ la fonction qui convertit les données ##########
     def conversionDonnees(self, nb_lignes, nb_colonnes):
         self.calculEchelle()
+        self.fascicule = int(self.lineEdit_val_fascicule.text())
         i, j = 0, 0
         for i in range (0, nb_lignes):
             for j in range(0, nb_colonnes):
@@ -117,14 +143,13 @@ class Ui_Accueil(object):
                 if value is not None and len(value.text()) != 0:
                     value = value.text()
                     if j == 0:
-                        self.donnees_x.append(int(value))
+                        self.donnees_x_initiale.append((int(value)))
+                        self.donnees_x.append(geologie_data.convertirX(int(value)))
                         self.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(str(geologie_data.convertirX(int(value)))))
-                    elif j == 1:
-                        self.donnees_y.append(int(value))
-                        self.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(str(geologie_data.convertirY(int(value), self.echelle))))
-                    elif j == 2:
-                        self.donnees_z.append(int(value))
-                        self.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(str(int(value)*100)))
+                        self.donnees_y.append(geologie_data.convertirY(int(value), self.echelle))
+                        self.tableWidget.setItem(i, j+1, QtWidgets.QTableWidgetItem(str(geologie_data.convertirY(int(value), self.echelle))))
+                        self.donnees_z.append(geologie_data.convertirY(self.fascicule, self.echelle))
+                        self.tableWidget.setItem(i, j+2, QtWidgets.QTableWidgetItem(str(geologie_data.convertirY(self.fascicule, self.echelle))))
                     print("The current is ", i, ", ", j)
                     print("In this cell we have ", value)
         self.donnees_converties = True
@@ -147,6 +172,8 @@ class Ui_Accueil(object):
                                                   "Les données ont déjà été converties !")
 
         print(self.donnees_converties)
+        print("======== X init  =======")
+        print(self.donnees_x_initiale)
         print("======== X =======")
         print(self.donnees_x)
         print("======== Y =======")
@@ -157,7 +184,7 @@ class Ui_Accueil(object):
 ########--------------------- Calcul de l'équidistance --------------------#########
     def calculEquidistance(self):
         if self.donnees_converties is True:
-            tableau_vals_equi = [x_item for x_item in self.donnees_x if x_item % 10 == 0]
+            tableau_vals_equi = [x_item for x_item in self.donnees_x_initiale if x_item % 10 == 0]
             if len(tableau_vals_equi) == 2:
                 self.equidistance = geologie_data.calculerEquidistance(tableau_vals_equi[0], tableau_vals_equi[1])
                 self.val_equi.setText(str(int(self.equidistance)))
@@ -176,6 +203,14 @@ class Ui_Accueil(object):
             QtWidgets.QMessageBox.information(self.tableWidget, "Courbe Géologique",
                                               "Veuillez d'abord convertir les données !")
 
+########---------------- Tracé du profil topographique ----------------##################
+    def profilTopographique(self):
+        if self.donnees_converties is True:
+            geologie_data.tracerProfilTopographique(self.donnees_x, self.donnees_y, self.donnees_z)
+        else:
+            QtWidgets.QMessageBox.information(self.tableWidget, "Profil topographique",
+                                              "Veuillez d'abord convertir les données !")
+
 ##################### Fin des fonctions #################################################
 
     def setupUi(self, Accueil):
@@ -189,7 +224,7 @@ class Ui_Accueil(object):
         self.label.setGeometry(QtCore.QRect(0, 0, 1000, 581))
         self.label.setMinimumSize(QtCore.QSize(1000, 0))
         self.label.setMaximumSize(QtCore.QSize(1000, 16777215))
-        pixmap = QtGui.QPixmap("images/img.jpg")
+        pixmap = QtGui.QPixmap("img.jpg")
         self.label.setPixmap(pixmap)
         self.label.setText("")
         self.label.setObjectName("label")
@@ -237,6 +272,11 @@ class Ui_Accueil(object):
         self.btn_profil = QtWidgets.QPushButton(self.centralwidget)
         self.btn_profil.setGeometry(QtCore.QRect(770, 190, 171, 41))
         self.btn_profil.setObjectName("btn_profil")
+
+        ############# Action du bouton Tout annuler ####################
+        self.btn_profil.clicked.connect(self.profilTopographique)
+        ################################################################
+
         self.label_val_equi = QtWidgets.QLabel(self.centralwidget)
         self.label_val_equi.setGeometry(QtCore.QRect(570, 380, 181, 41))
         font = QtGui.QFont()
@@ -293,7 +333,7 @@ class Ui_Accueil(object):
         self.btn_moins.setGeometry(QtCore.QRect(40, 540, 21, 21))
         self.btn_moins.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("images/moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_moins.setIcon(icon)
         self.btn_moins.setObjectName("btn_moins")
 
@@ -308,7 +348,7 @@ class Ui_Accueil(object):
         self.btn_plus.setFont(font)
         self.btn_plus.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("images/plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_plus.setIcon(icon1)
         self.btn_plus.setObjectName("btn_plus")
 
