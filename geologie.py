@@ -463,7 +463,7 @@ class Ui_Accueil(object):
         self.label_long_papier.setText(_translate("Accueil", "<html><head/><body><p>longueur (<span style=\" font-size:10pt; font-weight:600;\"> l </span>) sur papier</p></body></html>"))
         self.label_long_cm.setText(_translate("Accueil", "<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">cm</span></p></body></html>"))
         self.label_Long_km.setText(_translate("Accueil", "<html><head/><body><p><span style=\" font-weight:600;\">km</span></p></body></html>"))
-        self.label_Long_papier.setText(_translate("Accueil", "<html><head/><body><p>Longueur (<span style=\" font-size:10pt; font-weight:600;\"> L </span>) sur papier</p></body></html>"))
+        self.label_Long_papier.setText(_translate("Accueil", "<html><head/><body><p>Longueur (<span style=\" font-size:10pt; font-weight:600;\">L</span>) sur terrain</p></body></html>"))
         self.label_val_cm.setText(_translate("Accueil", "<html><head/><body><p><span style=\" font-weight:600;\">cm</span></p></body></html>"))
         self.label_val_fascicule.setText(_translate("Accueil", "<html><head/><body><p>valeur(<span style=\" font-size:10pt; font-weight:600;\"> Val </span>) du fascicule</p></body></html>"))
         self.menuFichier.setTitle(_translate("Accueil", "Fichier"))

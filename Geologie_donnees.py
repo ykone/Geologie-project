@@ -40,7 +40,18 @@ def tracerCourbeGeologique(Xdata, Ydata):
 
 
 def tracerProfilTopographique(X, Y, Z):
-    fig = figure("GeoGraph - Profil topographique", figsize=(14, 7))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_wireframe(Z, X, Y)
-    plt.show()
+    ma_figure = plt.figure("GeoGraph - Profil topographique", figsize=(14, 7))
+    R = list()
+    for indice, elt in enumerate(Y):
+        elt = elt+Z[indice]
+        R.append(elt)
+    print(Y)
+    print(R)
+    ma_figure.add_subplot(1,2,1,projection='3d')
+    title('Courbe 3D')
+    plot(X, Y, Z)
+    ma_figure.add_subplot(1,2,2)
+    title('Perspective en 2D avec l\'épaisseur')
+    plot(X, Y)
+    plot(X, R)
+    show()
